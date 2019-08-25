@@ -2,15 +2,12 @@ version: 2.0
 jobs: 
   build:
     docker:
-      - image: mcr.microsoft.com/dotnet/core/skd:2.2
-    step:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.2
+    steps:
       - checkout
       - run: 
-        name: Restore Packages
-        command: dotnet restore ./src
+          name: Restore Packages
+          command: dotnet restore ./src
       - run: 
-        name: Restore Packages
-        command: dotnet restore ./src
-      - run: 
-        name: Restore Packages
-        command: dotnet build ./src
+          name: Build 
+          command: dotnet build ./src
