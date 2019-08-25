@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: mcr.microsoft.com/dotnet/core/skd:2.2
-    step:
+    steps:
       - checkout
       - run: 
         name: Restore Packages
