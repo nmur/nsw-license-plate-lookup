@@ -9,8 +9,5 @@ jobs:
           name: Restore Packages
           command: dotnet restore ./src
       - run: 
-          name: Restore Packages
-          command: dotnet restore ./src
-      - run: 
-          name: Restore Packages
+          name: Build 
           command: dotnet build ./src
