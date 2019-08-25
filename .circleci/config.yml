@@ -6,11 +6,11 @@ jobs:
     steps:
       - checkout
       - run: 
-        name: Restore Packages
-        command: dotnet restore ./src
+          name: Restore Packages
+          command: dotnet restore ./src
       - run: 
-        name: Restore Packages
-        command: dotnet restore ./src
+          name: Restore Packages
+          command: dotnet restore ./src
       - run: 
-        name: Restore Packages
-        command: dotnet build ./src
+          name: Restore Packages
+          command: dotnet build ./src
