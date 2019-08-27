@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace NswLicensePlateLookup.Controllers
 {
@@ -11,9 +12,9 @@ namespace NswLicensePlateLookup.Controllers
     {
         [HttpGet]
         [Route("api/plate/{plateNumber}")]
-        public ActionResult<string> Get(string plateNumber)
+        public ActionResult<string> GetPlateNumber(string plateNumber)
         {
-            return plateNumber;
+            return StatusCode(StatusCodes.Status501NotImplemented);
         }
     }
 }
