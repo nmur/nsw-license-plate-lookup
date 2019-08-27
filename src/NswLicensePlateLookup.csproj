@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <RootNamespace>nsw_license_plate_lookup</RootNamespace>
+    <RootNamespace>NswLicensePlateLookup</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

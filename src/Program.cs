@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace nsw_license_plate_lookup
+namespace NswLicensePlateLookup
 {
     public class Program
     {

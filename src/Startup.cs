@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace nsw_license_plate_lookup
+namespace NswLicensePlateLookup
 {
     public class Startup
     {
