@@ -7,7 +7,7 @@ namespace NswLicensePlateLookupTests
     public class PlateLookupServiceTests
     {
         [Fact]
-        public void GivenEmptyStringPlateNumber_WhenPlateDetailsAreRequested_ThenErrorIsReturned()
+        public void GivenEmptyStringPlateNumber_WhenPlateDetailsAreRequested_ThenArgumentExceptionIsThrown()
         {
             // Arrange
             var plateLookupService = new PlateLookupService();
