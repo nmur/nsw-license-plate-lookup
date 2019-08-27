@@ -7,7 +7,10 @@ jobs:
       - checkout
       - run: 
           name: Restore Packages
-          command: dotnet restore ./src
+          command: dotnet restore ./src/NswLicensePlateLookup
       - run: 
           name: Build 
-          command: dotnet build ./src
+          command: dotnet build ./src/NswLicensePlateLookup
+      - run: 
+          name: Test 
+          command: dotnet test ./tst/NswLicensePlateLookupTests
