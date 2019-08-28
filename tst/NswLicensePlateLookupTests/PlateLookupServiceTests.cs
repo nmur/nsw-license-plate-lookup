@@ -18,5 +18,20 @@ namespace NswLicensePlateLookupTests
             // Assert
             Assert.Throws<ArgumentException>(action);
         }
+
+        [Fact]
+        public void GivenValidPlateNumber_WhenPlateDetailsAreRequested_ThenBasicDetailsAreReturned()
+        {
+            // Arrange
+            var plateLookupService = new PlateLookupService();
+            
+            // Act 
+            var plateDetails = plateLookupService.GetPlateDetails("ABC123");
+
+            // Assert
+            Assert.Equal("", plateDetails);
+        }
+
+
     }
 }
