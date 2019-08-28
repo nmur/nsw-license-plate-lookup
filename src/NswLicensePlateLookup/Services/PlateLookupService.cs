@@ -26,6 +26,9 @@ namespace NswLicensePlateLookup.Services
 
     public interface IPlateLookupServiceApi
     {
+        [Headers("Content-Type: application/json")]
+        [Headers("Content-Type: application/json")]
+        [Headers("Content-Type: application/json")]
         [Post("/MyServiceNSW/apexremote")]
         Task<Object> SendServiceNswRequest();
     }
