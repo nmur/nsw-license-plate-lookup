@@ -19,7 +19,7 @@ namespace NswLicensePlateLookup.Services
         private string GetRequestToken()
         {
             var serviceApi = RestService.For<IPlateLookupServiceApi>("https://my.service.nsw.gov.au");
-
+            await tokenResult = serviceApi.SendServiceNswRequest();
             return "";
         }
     }
@@ -27,8 +27,8 @@ namespace NswLicensePlateLookup.Services
     public interface IPlateLookupServiceApi
     {
         [Headers("Content-Type: application/json")]
-        [Headers("Content-Type: application/json")]
-        [Headers("Content-Type: application/json")]
+        [Headers("origin: https://my.service.nsw.gov.au")]
+        [Headers("referer: https://my.service.nsw.gov.au/MyServiceNSW/index")]
         [Post("/MyServiceNSW/apexremote")]
         Task<Object> SendServiceNswRequest();
     }
