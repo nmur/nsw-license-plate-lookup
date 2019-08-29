@@ -1,32 +1,30 @@
 using System;
 using Xunit;
 using NswLicensePlateLookup.Services;
+using System.Threading.Tasks;
 
 namespace NswLicensePlateLookupTests
 {
     public class PlateLookupServiceTests
     {
         [Fact]
-        public void GivenEmptyStringPlateNumber_WhenPlateDetailsAreRequested_ThenArgumentExceptionIsThrown()
+        public async Task GivenEmptyStringPlateNumber_WhenPlateDetailsAreRequested_ThenArgumentExceptionIsThrown()
         {
             // Arrange
             var plateLookupService = new PlateLookupService();
             
-            // Act 
-            Action action = () => plateLookupService.GetPlateDetails("");
-
-            // Assert
-            Assert.Throws<ArgumentException>(action);
+            // Act + Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => plateLookupService.GetPlateDetails(""));
         }
 
         [Fact]
-        public void GivenValidPlateNumber_WhenPlateDetailsAreRequested_ThenBasicDetailsAreReturned()
+        public async Task GivenValidPlateNumber_WhenPlateDetailsAreRequested_ThenBasicDetailsAreReturnedAsync()
         {
             // Arrange
             var plateLookupService = new PlateLookupService();
             
             // Act 
-            var plateDetails = plateLookupService.GetPlateDetails("ABC123");
+            var plateDetails = await plateLookupService.GetPlateDetails("ABC123");
 
             // Assert
             Assert.Equal("", plateDetails);

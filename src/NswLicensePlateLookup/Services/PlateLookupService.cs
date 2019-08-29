@@ -6,29 +6,27 @@ namespace NswLicensePlateLookup.Services
 {
     public class PlateLookupService
     {
-        public string GetPlateDetails(string plateNumber)
+        public async Task<string> GetPlateDetails(string plateNumber)
         {
             if (plateNumber == string.Empty)
                 throw new ArgumentException();
 
-            GetRequestToken();
+            await SendPlateRequest();
 
             return "";
         }
 
-        private string GetRequestToken()
+        private async Task<string> SendPlateRequest()
         {
             var serviceApi = RestService.For<IPlateLookupServiceApi>("https://my.service.nsw.gov.au");
-            await tokenResult = serviceApi.SendServiceNswRequest();
-            return "";
+            var plateDetailsResponse = await serviceApi.SendServiceNswRequest();
+            return plateDetailsResponse.ToString();
         }
     }
 
     public interface IPlateLookupServiceApi
     {
-        [Headers("Content-Type: application/json")]
-        [Headers("origin: https://my.service.nsw.gov.au")]
-        [Headers("referer: https://my.service.nsw.gov.au/MyServiceNSW/index")]
+        [Headers("Content-Type: application/json", "origin: https://my.service.nsw.gov.au", "referer: https://my.service.nsw.gov.au/MyServiceNSW/index")]
         [Post("/MyServiceNSW/apexremote")]
         Task<Object> SendServiceNswRequest();
     }
