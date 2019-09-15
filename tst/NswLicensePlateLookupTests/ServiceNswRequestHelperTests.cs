@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 using NswLicensePlateLookup.Services;
 using NswLicensePlateLookup.Interfaces;
@@ -9,7 +8,7 @@ using System.Collections.Generic;
 
 namespace NswLicensePlateLookupTests
 {
-    public class ServiceNswRequestHelperTests
+  public class ServiceNswRequestHelperTests
     {
         private const string ValidToken = "411a6958-3bc1-45a5-ab38-5b57aff75d75";
         
