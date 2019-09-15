@@ -1,4 +1,3 @@
-using System;
 using Newtonsoft.Json;
 
 namespace NswLicensePlateLookup.Models
@@ -12,6 +11,6 @@ namespace NswLicensePlateLookup.Models
         public string StatusMessage { get; set; }
 
         [JsonProperty("statusObject")]
-        public Guid Token { get; set; }
+        public string Token { get; set; }
     }
 }
