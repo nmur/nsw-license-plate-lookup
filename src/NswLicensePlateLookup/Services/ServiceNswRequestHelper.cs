@@ -8,7 +8,12 @@ namespace NswLicensePlateLookup.Services
 {
     public class ServiceNswRequestHelper : IServiceNswRequestHelper
     {
-        private IServiceNswRequestApi _serviceNswRequestApi = RestService.For<IServiceNswRequestApi>("https://my.service.nsw.gov.au");
+        private IServiceNswRequestApi _serviceNswRequestApi;
+
+        public ServiceNswRequestHelper(IServiceNswRequestApi serviceNswRequestApi)
+        {
+            _serviceNswRequestApi = serviceNswRequestApi;
+        }
 
         public async Task<string> GetPlateDetails(string plateNumber)
         {

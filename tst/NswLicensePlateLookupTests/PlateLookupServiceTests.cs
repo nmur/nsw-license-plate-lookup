@@ -9,14 +9,14 @@ namespace NswLicensePlateLookupTests
 {
     public class PlateLookupServiceTests
     {
-        private IServiceNswRequestHelper _serviceNswRequestHelper;
+        private IServiceNswRequestHelper _fakeServiceNswRequestHelper;
 
         private PlateLookupService _plateLookupService;
 
         public PlateLookupServiceTests()
         {
-            _serviceNswRequestHelper = A.Fake<IServiceNswRequestHelper>();
-            _plateLookupService = new PlateLookupService(_serviceNswRequestHelper);
+            _fakeServiceNswRequestHelper = A.Fake<IServiceNswRequestHelper>();
+            _plateLookupService = new PlateLookupService(_fakeServiceNswRequestHelper);
         }
 
         [Fact]
@@ -27,12 +27,12 @@ namespace NswLicensePlateLookupTests
         }
 
         [Fact]
-        public async Task GivenValidPlateNumber_WhenPlateDetailsAreRequested_ThenBasicDetailsAreReturnedAsync()
+        public async Task GivenValidPlateNumber_WhenPlateDetailsAreRequested_ThenBasicDetailsAreReturned()
         {
             // Arrange
             var plateNumber = "RWAGON";
             var expectedPlateDetails = "GOLF";
-            A.CallTo(() => _serviceNswRequestHelper.GetPlateDetails(plateNumber)).Returns(expectedPlateDetails);
+            A.CallTo(() => _fakeServiceNswRequestHelper.GetPlateDetails(plateNumber)).Returns(expectedPlateDetails);
 
             // Act 
             var plateDetails = await _plateLookupService.GetPlateDetails(plateNumber);
