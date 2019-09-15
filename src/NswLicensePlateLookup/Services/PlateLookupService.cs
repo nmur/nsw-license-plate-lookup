@@ -1,15 +1,16 @@
 using System;
 using System.Threading.Tasks;
+using NswLicensePlateLookup.Interfaces;
 
 namespace NswLicensePlateLookup.Services
 {
     public class PlateLookupService
     {
-        private IServiceNswRequestHelper ServiceNswRequestHelper;
+        private IServiceNswRequestHelper _serviceNswRequestHelper;
 
         public PlateLookupService(IServiceNswRequestHelper serviceNswRequestHelper)
         {
-            ServiceNswRequestHelper = serviceNswRequestHelper;
+            _serviceNswRequestHelper = serviceNswRequestHelper;
         }
 
         public async Task<string> GetPlateDetails(string plateNumber)
@@ -17,7 +18,7 @@ namespace NswLicensePlateLookup.Services
             if (plateNumber == string.Empty)
                 throw new ArgumentException();
 
-            return await ServiceNswRequestHelper.GetPlateDetails(plateNumber);
+            return await _serviceNswRequestHelper.GetPlateDetails(plateNumber);
         }
     }
 }

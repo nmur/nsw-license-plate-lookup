@@ -8,13 +8,13 @@ namespace NswLicensePlateLookup.Services
 {
     public class ServiceNswRequestHelper : IServiceNswRequestHelper
     {
-        private IServiceNswRequestApi ServiceNswRequestApi = RestService.For<IServiceNswRequestApi>("https://my.service.nsw.gov.au");
+        private IServiceNswRequestApi _serviceNswRequestApi = RestService.For<IServiceNswRequestApi>("https://my.service.nsw.gov.au");
 
         public async Task<string> GetPlateDetails(string plateNumber)
         {
             var token = await GetTransactionToken();
 
-            var plateDetailsResponse = await ServiceNswRequestApi.SendServiceNswRequest<PlateDetailsResult>(GetPlateDetailsRequestBody(token, plateNumber));
+            var plateDetailsResponse = await _serviceNswRequestApi.SendServiceNswRequest<PlateDetailsResult>(GetPlateDetailsRequestBody(token, plateNumber));
             return GetPlateDetailsFromResponse(plateDetailsResponse);
         }
 
@@ -31,7 +31,7 @@ namespace NswLicensePlateLookup.Services
 
         private async Task<string> GetTransactionToken()
         {
-            var tokenResponse = await ServiceNswRequestApi.SendServiceNswRequest<TokenResult>(GetTransactionTokenRequestBody());
+            var tokenResponse = await _serviceNswRequestApi.SendServiceNswRequest<TokenResult>(GetTransactionTokenRequestBody());
             return GetTokenFromResponse(tokenResponse);
         }
 
