@@ -1,32 +1,8 @@
 using Newtonsoft.Json;
 
 namespace NswLicensePlateLookup.Models
-{
-    public class PlateDetailsResponse
-    {
-        [JsonProperty("statusCode")]
-        public long StatusCode { get; set; }
-
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("tid")]
-        public long Tid { get; set; }
-
-        [JsonProperty("ref")]
-        public bool Ref { get; set; }
-
-        [JsonProperty("action")]
-        public string Action { get; set; }
-
-        [JsonProperty("method")]
-        public string Method { get; set; }
-
-        [JsonProperty("result")]
-        public Result Result { get; set; }
-    }
-
-    public class Result
+{    
+    public class PlateDetailsResult
     {
         [JsonProperty("statusCode")]
         public long StatusCode { get; set; }
@@ -35,10 +11,10 @@ namespace NswLicensePlateLookup.Models
         public string StatusMessage { get; set; }
 
         [JsonProperty("statusObject")]
-        public StatusObject StatusObject { get; set; }
+        public PlateDetails PlateDetails { get; set; }
     }
 
-    public class StatusObject
+    public class PlateDetails
     {
         [JsonProperty("vehicle")]
         public Vehicle Vehicle { get; set; }

@@ -1,9 +1,8 @@
-using System;
 using Newtonsoft.Json;
 
 namespace NswLicensePlateLookup.Models
 {
-    public class TokenResponse
+    public class ServiceNswResponse<ResultType>
     {
         [JsonProperty("statusCode")]
         public long StatusCode { get; set; }
@@ -24,18 +23,6 @@ namespace NswLicensePlateLookup.Models
         public string Method { get; set; }
 
         [JsonProperty("result")]
-        public TokenResult Result { get; set; }
-    }
-
-    public class TokenResult
-    {
-        [JsonProperty("statusCode")]
-        public long StatusCode { get; set; }
-
-        [JsonProperty("statusMessage")]
-        public string StatusMessage { get; set; }
-
-        [JsonProperty("statusObject")]
-        public Guid StatusObject { get; set; }
+        public ResultType Result { get; set; }
     }
 }
