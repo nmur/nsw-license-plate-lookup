@@ -4,7 +4,7 @@ using NswLicensePlateLookup.Interfaces;
 
 namespace NswLicensePlateLookup.Services
 {
-    public class PlateLookupService
+    public class PlateLookupService : IPlateLookupService
     {
         private IServiceNswRequestHelper _serviceNswRequestHelper;
 

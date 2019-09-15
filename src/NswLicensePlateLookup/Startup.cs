@@ -28,6 +28,7 @@ namespace NswLicensePlateLookup
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://my.service.nsw.gov.au"));
 
             services.AddSingleton<IServiceNswRequestHelper, ServiceNswRequestHelper>();
+            services.AddSingleton<IPlateLookupService, PlateLookupService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
