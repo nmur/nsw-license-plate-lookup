@@ -1,20 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using NswLicensePlateLookup.Interfaces;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 
 namespace NswLicensePlateLookup.Controllers
 {
     [ApiController]
     public class PlateLookupController : ControllerBase
     {
+        private IPlateLookupService _plateLookupService;
+
+        public PlateLookupController(IPlateLookupService plateLookupService)
+        {
+            _plateLookupService = plateLookupService;
+        }
+
         [HttpGet]
         [Route("api/plate/{plateNumber}")]
-        public ActionResult<string> GetPlateNumber(string plateNumber)
+        public async Task<ActionResult<string>> GetPlateDetails(string plateNumber)
         {
-            return StatusCode(StatusCodes.Status501NotImplemented);
+            var plateDetails = await _plateLookupService.GetPlateDetails(plateNumber);
+
+            return Ok(plateDetails);
         }
     }
 }

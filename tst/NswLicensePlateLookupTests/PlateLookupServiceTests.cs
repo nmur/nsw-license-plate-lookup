@@ -1,22 +1,44 @@
 using System;
 using Xunit;
 using NswLicensePlateLookup.Services;
+using NswLicensePlateLookup.Interfaces;
+using System.Threading.Tasks;
+using FakeItEasy;
 
 namespace NswLicensePlateLookupTests
 {
     public class PlateLookupServiceTests
     {
+        private IServiceNswRequestHelper _fakeServiceNswRequestHelper;
+
+        private PlateLookupService _plateLookupService;
+
+        public PlateLookupServiceTests()
+        {
+            _fakeServiceNswRequestHelper = A.Fake<IServiceNswRequestHelper>();
+            _plateLookupService = new PlateLookupService(_fakeServiceNswRequestHelper);
+        }
+
         [Fact]
-        public void GivenEmptyStringPlateNumber_WhenPlateDetailsAreRequested_ThenArgumentExceptionIsThrown()
+        public async Task GivenEmptyStringPlateNumber_WhenPlateDetailsAreRequested_ThenArgumentExceptionIsThrown()
+        {
+            // Act + Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => _plateLookupService.GetPlateDetails(""));
+        }
+
+        [Fact]
+        public async Task GivenValidPlateNumber_WhenPlateDetailsAreRequested_ThenBasicDetailsAreReturned()
         {
             // Arrange
-            var plateLookupService = new PlateLookupService();
-            
+            var plateNumber = "RWAGON";
+            var expectedPlateDetails = "GOLF";
+            A.CallTo(() => _fakeServiceNswRequestHelper.GetPlateDetails(plateNumber)).Returns(expectedPlateDetails);
+
             // Act 
-            Action action = () => plateLookupService.GetPlateDetails("");
+            var plateDetails = await _plateLookupService.GetPlateDetails(plateNumber);
 
             // Assert
-            Assert.Throws<ArgumentException>(action);
+            Assert.Equal(expectedPlateDetails, plateDetails);
         }
     }
 }
