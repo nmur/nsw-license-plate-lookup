@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using NswLicensePlateLookup.Models;
 using Refit;
 
 namespace NswLicensePlateLookup.Services
@@ -28,6 +29,6 @@ namespace NswLicensePlateLookup.Services
     {
         [Headers("Content-Type: application/json", "origin: https://my.service.nsw.gov.au", "referer: https://my.service.nsw.gov.au/MyServiceNSW/index")]
         [Post("/MyServiceNSW/apexremote")]
-        Task<Object> SendServiceNswRequest();
+        Task<Object> SendServiceNswRequest(ServiceNswRequestBody body);
     }
 }

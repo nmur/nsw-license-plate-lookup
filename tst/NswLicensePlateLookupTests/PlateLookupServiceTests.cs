@@ -29,7 +29,5 @@ namespace NswLicensePlateLookupTests
             // Assert
             Assert.Equal("", plateDetails);
         }
-
-
     }
 }
