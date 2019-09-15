@@ -24,10 +24,10 @@ namespace NswLicensePlateLookupTests
             var plateLookupService = new PlateLookupService();
             
             // Act 
-            var plateDetails = await plateLookupService.GetPlateDetails("ABC123");
+            var plateDetails = await plateLookupService.GetPlateDetails("RWAGON");
 
             // Assert
-            Assert.Equal("", plateDetails);
+            Assert.Equal("GOLF", plateDetails);
         }
     }
 }
