@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using NswLicensePlateLookup.Interfaces;
 using NswLicensePlateLookup.Models;
 using Refit;
@@ -9,18 +11,26 @@ namespace NswLicensePlateLookup.Services
     public class ServiceNswRequestHelper : IServiceNswRequestHelper
     {
         private IServiceNswRequestApi _serviceNswRequestApi;
+        
+        private IMemoryCache _cache;
 
-        public ServiceNswRequestHelper(IServiceNswRequestApi serviceNswRequestApi)
+        public ServiceNswRequestHelper(IServiceNswRequestApi serviceNswRequestApi, IMemoryCache cache)
         {
             _serviceNswRequestApi = serviceNswRequestApi;
+            _cache = cache;
         }
 
         public async Task<string> GetPlateDetails(string plateNumber)
         {
             var token = await GetTransactionToken();
 
-            var plateDetailsResponse = await _serviceNswRequestApi.SendServiceNswRequest<PlateDetailsResult>(GetPlateDetailsRequestBody(token, plateNumber));
-            return GetPlateDetailsFromResponse(plateDetailsResponse);
+            return await
+                _cache.GetOrCreateAsync("plate_" + plateNumber, async entry =>
+                {
+                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1);
+                    var plateDetailsResponse = await _serviceNswRequestApi.SendServiceNswRequest<PlateDetailsResult>(GetPlateDetailsRequestBody(token, plateNumber));
+                    return GetPlateDetailsFromResponse(plateDetailsResponse);
+                });
         }
 
         private static ServiceNswRequestBody GetPlateDetailsRequestBody(string token, string plateNumber)
@@ -36,8 +46,14 @@ namespace NswLicensePlateLookup.Services
 
         private async Task<string> GetTransactionToken()
         {
-            var tokenResponse = await _serviceNswRequestApi.SendServiceNswRequest<TokenResult>(GetTransactionTokenRequestBody());
-            return GetTokenFromResponse(tokenResponse);
+            return await
+                _cache.GetOrCreateAsync("token", async entry =>
+                {
+                    entry.SlidingExpiration = TimeSpan.FromMinutes(10);
+                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1);
+                    var tokenResponse = await _serviceNswRequestApi.SendServiceNswRequest<TokenResult>(GetTransactionTokenRequestBody());
+                    return GetTokenFromResponse(tokenResponse);
+                });
         }
 
         private string GetTokenFromResponse(List<ServiceNswResponse<TokenResult>> tokenResponse) => tokenResponse[0].Result.Token;
