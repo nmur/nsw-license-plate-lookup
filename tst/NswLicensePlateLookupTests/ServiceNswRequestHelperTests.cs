@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using NswLicensePlateLookup.Models;
 using System.Collections.Generic;
+using Microsoft.Extensions.Caching.Memory;
+using System;
 
 namespace NswLicensePlateLookupTests
 {
@@ -14,12 +16,15 @@ namespace NswLicensePlateLookupTests
         
         private IServiceNswRequestApi _fakeServiceNswRequestApi;
 
+        private IMemoryCache _fakeMemoryCache;
+
         private IServiceNswRequestHelper _serviceNswRequestHelper;
 
         public ServiceNswRequestHelperTests()
         {
             _fakeServiceNswRequestApi = A.Fake<IServiceNswRequestApi>();
-            _serviceNswRequestHelper = new ServiceNswRequestHelper(_fakeServiceNswRequestApi);
+            _fakeMemoryCache = A.Fake<IMemoryCache>();
+            _serviceNswRequestHelper = new ServiceNswRequestHelper(_fakeServiceNswRequestApi, _fakeMemoryCache);
         }
 
         [Fact]
