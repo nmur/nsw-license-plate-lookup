@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,8 @@ using Refit;
 
 namespace NswLicensePlateLookup
 {
-  public class Startup
+    [ExcludeFromCodeCoverage]
+    public class Startup
     {
         public Startup(IConfiguration configuration)
         {
