@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using NswLicensePlateLookup.Interfaces;
+using NswLicensePlateLookup.Models;
 
 namespace NswLicensePlateLookup.Services
 {
@@ -13,7 +14,7 @@ namespace NswLicensePlateLookup.Services
             _serviceNswRequestHelper = serviceNswRequestHelper;
         }
 
-        public async Task<string> GetPlateDetails(string plateNumber)
+        public async Task<PlateDetails> GetPlateDetails(string plateNumber)
         {
             if (plateNumber == string.Empty)
                 throw new ArgumentException();

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using NswLicensePlateLookup.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using NswLicensePlateLookup.Models;
 
 namespace NswLicensePlateLookupTests
 {
@@ -24,15 +25,32 @@ namespace NswLicensePlateLookupTests
         {
             // Arrange
             var plateNumber = "RWAGON";
-            var expectedPlateDetails = "GOLF";
-            A.CallTo(() => _fakePlateLookupService.GetPlateDetails(plateNumber)).Returns(expectedPlateDetails);
+            A.CallTo(() => _fakePlateLookupService.GetPlateDetails(plateNumber)).Returns(SuccessfulPlateDetailsResponseVehicle);
 
             // Act 
             var plateDetailsResponse = await _plateLookupController.GetPlateDetails(plateNumber);
 
             // Assert
             var plateDetails = plateDetailsResponse.Result as OkObjectResult;;
-            Assert.Equal(expectedPlateDetails, plateDetails.Value);
+            Assert.Equal(SuccessfulPlateDetailsResponseVehicle, plateDetails.Value);
         }
+
+        private PlateDetails SuccessfulPlateDetailsResponseVehicle = new PlateDetails
+        {
+            Vehicle = new Vehicle
+            {
+                BodyShape = "STATION WAGON",
+                Manufacturer = "VLK",
+                ManufactureYear = 2015,
+                Model = "GOLF",
+                NswPlateNumber = "RWAGON",
+                PlateType = "O",
+                TareWeight = 1509,
+                Variant = "16 2.0 6SPA R WE 26KW WAGON",
+                VehicleColour = "GREY",
+                VehicleType = "PASSENGER VEHICLES",
+                VinNumber = "xxxxxxxxxxxxx0823"
+            }
+        };
     }
 }

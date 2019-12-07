@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
+using NswLicensePlateLookup.Models;
 
 namespace NswLicensePlateLookup.Interfaces
 {
     public interface IPlateLookupService
     {
-        Task<string> GetPlateDetails(string plateNumber);
+        Task<PlateDetails> GetPlateDetails(string plateNumber);
     }
 }
