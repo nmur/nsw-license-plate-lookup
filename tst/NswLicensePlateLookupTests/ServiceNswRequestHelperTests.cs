@@ -6,7 +6,6 @@ using FakeItEasy;
 using NswLicensePlateLookup.Models;
 using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
-using System;
 
 namespace NswLicensePlateLookupTests
 {
@@ -28,11 +27,11 @@ namespace NswLicensePlateLookupTests
         }
 
         [Fact]
-        public async Task GivenValidPlateNumber_WhenPlateDetailsAreRequested_ThenBasicDetailsAreReturned()
+        public async Task GivenValidPlateNumber_WhenPlateDetailsAreRequested_ThenPlateDetailsAreReturned()
         {
             // Arrange
             var plateNumber = "RWAGON";
-            var expectedPlateDetails = "GOLF";
+            var expectedPlateDetails = SuccessfulPlateDetailsResponseVehicle;
             A.CallTo(() => _fakeServiceNswRequestApi.SendServiceNswRequest<TokenResult>(A<ServiceNswRequestBody>._)).Returns(GetSuccessfulTransactionTokenResponse());
             A.CallTo(() => _fakeServiceNswRequestApi.SendServiceNswRequest<PlateDetailsResult>(A<ServiceNswRequestBody>._)).Returns(GetSuccessfulPlateDetailsResponse());
 
@@ -81,26 +80,28 @@ namespace NswLicensePlateLookupTests
                     {
                         StatusCode = 2000,
                         StatusMessage = "success",
-                        PlateDetails = new PlateDetails
-                        {
-                            Vehicle = new Vehicle
-                            {
-                                BodyShape = "STATION WAGON",
-                                Manufacturer = "VLK",
-                                ManufactureYear = 2015,
-                                Model = "GOLF",
-                                NswPlateNumber = "RWAGON",
-                                PlateType = "O",
-                                TareWeight = 1509,
-                                Variant = "16 2.0 6SPA R WE 26KW WAGON",
-                                VehicleColour = "GREY",
-                                VehicleType = "PASSENGER VEHICLES",
-                                VinNumber = "xxxxxxxxxxxxx0823"
-                            }
-                        }
+                        PlateDetails = SuccessfulPlateDetailsResponseVehicle
                     }
                 }
             };
         }
+
+        private PlateDetails SuccessfulPlateDetailsResponseVehicle = new PlateDetails
+        {
+            Vehicle = new Vehicle
+            {
+                BodyShape = "STATION WAGON",
+                Manufacturer = "VLK",
+                ManufactureYear = 2015,
+                Model = "GOLF",
+                NswPlateNumber = "RWAGON",
+                PlateType = "O",
+                TareWeight = 1509,
+                Variant = "16 2.0 6SPA R WE 26KW WAGON",
+                VehicleColour = "GREY",
+                VehicleType = "PASSENGER VEHICLES",
+                VinNumber = "xxxxxxxxxxxxx0823"
+            }
+        };
     }
 }
