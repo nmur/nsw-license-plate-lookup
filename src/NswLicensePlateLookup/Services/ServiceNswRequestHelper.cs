@@ -20,7 +20,7 @@ namespace NswLicensePlateLookup.Services
             _cache = cache;
         }
 
-        public async Task<string> GetPlateDetails(string plateNumber)
+        public async Task<PlateDetails> GetPlateDetails(string plateNumber)
         {
             var token = await GetTransactionToken();
 
@@ -42,7 +42,7 @@ namespace NswLicensePlateLookup.Services
             };
         }
         
-        private string GetPlateDetailsFromResponse(List<ServiceNswResponse<PlateDetailsResult>> plateDetailsResponse) => plateDetailsResponse[0].Result.PlateDetails.Vehicle.Model;
+        private PlateDetails GetPlateDetailsFromResponse(List<ServiceNswResponse<PlateDetailsResult>> plateDetailsResponse) => plateDetailsResponse[0].Result.PlateDetails;
 
         private async Task<string> GetTransactionToken()
         {
