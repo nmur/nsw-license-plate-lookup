@@ -32,6 +32,7 @@ namespace NswLicensePlateLookup
             services.AddSingleton<IServiceNswTransactionTokenHelper, ServiceNswTransactionTokenHelper>();
             services.AddSingleton<IServiceNswRequestHelper, ServiceNswRequestHelper>();
             services.AddSingleton<IPlateLookupService, PlateLookupService>();
+            services.AddHostedService<TransactionTokenRefreshBackgroundTask>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
