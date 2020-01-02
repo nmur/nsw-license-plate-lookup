@@ -1,17 +1,26 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
 namespace NswLicensePlateLookup.Services
 {
+    [ExcludeFromCodeCoverage]
     public class TransactionTokenRefreshBackgroundTask : IHostedService, IDisposable
     {
         private Timer _timer;
+        
+        private IServiceNswTransactionTokenHelper _serviceNswTransactionTokenHelper;
+
+        public TransactionTokenRefreshBackgroundTask(IServiceNswTransactionTokenHelper serviceNswTransactionTokenHelper)
+        {
+            _serviceNswTransactionTokenHelper = serviceNswTransactionTokenHelper;
+        }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(RefreshTransactionToken, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            _timer = new Timer(RefreshTransactionToken, null, TimeSpan.Zero, new TimeSpan(0,10,1));
 
             return Task.CompletedTask;
         }
@@ -30,7 +39,7 @@ namespace NswLicensePlateLookup.Services
 
         private void RefreshTransactionToken(object state)
         {
-            Console.WriteLine($"Refreshing transaction token at: {DateTime.Now.ToString()}");
+            var token = _serviceNswTransactionTokenHelper.GetTransactionToken().GetAwaiter().GetResult();
         }
     }
 }
