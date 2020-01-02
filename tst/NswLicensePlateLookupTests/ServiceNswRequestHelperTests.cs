@@ -13,7 +13,9 @@ namespace NswLicensePlateLookupTests
     {
         private const string ValidToken = "411a6958-3bc1-45a5-ab38-5b57aff75d75";
         
-        private IServiceNswRequestApi _fakeServiceNswRequestApi;
+        private IServiceNswApi _fakeServiceNswApi;
+
+        private IServiceNswTransactionTokenHelper _fakeServiceNswTransactionTokenHelper;
 
         private IMemoryCache _fakeMemoryCache;
 
@@ -21,9 +23,10 @@ namespace NswLicensePlateLookupTests
 
         public ServiceNswRequestHelperTests()
         {
-            _fakeServiceNswRequestApi = A.Fake<IServiceNswRequestApi>();
+            _fakeServiceNswApi = A.Fake<IServiceNswApi>();
+            _fakeServiceNswTransactionTokenHelper = A.Fake<IServiceNswTransactionTokenHelper>();
             _fakeMemoryCache = A.Fake<IMemoryCache>();
-            _serviceNswRequestHelper = new ServiceNswRequestHelper(_fakeServiceNswRequestApi, _fakeMemoryCache);
+            _serviceNswRequestHelper = new ServiceNswRequestHelper(_fakeServiceNswApi, _fakeServiceNswTransactionTokenHelper, _fakeMemoryCache);
         }
 
         [Fact]
@@ -32,36 +35,14 @@ namespace NswLicensePlateLookupTests
             // Arrange
             var plateNumber = "RWAGON";
             var expectedPlateDetails = SuccessfulPlateDetailsResponseVehicle;
-            A.CallTo(() => _fakeServiceNswRequestApi.SendServiceNswRequest<TokenResult>(A<ServiceNswRequestBody>._)).Returns(GetSuccessfulTransactionTokenResponse());
-            A.CallTo(() => _fakeServiceNswRequestApi.SendServiceNswRequest<PlateDetailsResult>(A<ServiceNswRequestBody>._)).Returns(GetSuccessfulPlateDetailsResponse());
+            A.CallTo(() => _fakeServiceNswTransactionTokenHelper.GetTransactionToken()).Returns(ValidToken);
+            A.CallTo(() => _fakeServiceNswApi.SendServiceNswRequest<PlateDetailsResult>(A<ServiceNswRequestBody>._)).Returns(GetSuccessfulPlateDetailsResponse());
 
             // Act 
             var plateDetails = await _serviceNswRequestHelper.GetPlateDetails(plateNumber);
 
             // Assert
             Assert.Equal(expectedPlateDetails, plateDetails);
-        }
-
-        private async Task<List<ServiceNswResponse<TokenResult>>> GetSuccessfulTransactionTokenResponse()
-        {
-            return new List<ServiceNswResponse<TokenResult>>
-            {
-                new ServiceNswResponse<TokenResult>
-                {
-                    StatusCode = 200,
-                    Type = "rpc",
-                    Tid = 1,
-                    Ref = false,
-                    Action = "RMSWrapperCtrl",
-                    Method = "createRMSTransaction",
-                    Result = new TokenResult
-                    {
-                        StatusCode = 2000,
-                        StatusMessage = "success",
-                        Token = ValidToken
-                    }
-                }
-            };
         }
 
         private async Task<List<ServiceNswResponse<PlateDetailsResult>>> GetSuccessfulPlateDetailsResponse()
