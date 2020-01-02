@@ -26,9 +26,10 @@ namespace NswLicensePlateLookup
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddRefitClient<IServiceNswRequestApi>()
+            services.AddRefitClient<IServiceNswApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://my.service.nsw.gov.au"));
 
+            services.AddSingleton<IServiceNswTransactionTokenHelper, ServiceNswTransactionTokenHelper>();
             services.AddSingleton<IServiceNswRequestHelper, ServiceNswRequestHelper>();
             services.AddSingleton<IPlateLookupService, PlateLookupService>();
         }
