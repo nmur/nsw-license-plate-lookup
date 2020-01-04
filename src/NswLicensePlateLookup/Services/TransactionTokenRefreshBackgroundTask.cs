@@ -20,7 +20,7 @@ namespace NswLicensePlateLookup.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(RefreshTransactionToken, null, TimeSpan.Zero, new TimeSpan(0,10,1));
+            _timer = new Timer(RefreshTransactionToken, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
 
             return Task.CompletedTask;
         }
@@ -39,7 +39,8 @@ namespace NswLicensePlateLookup.Services
 
         private void RefreshTransactionToken(object state)
         {
-            var token = _serviceNswTransactionTokenHelper.GetTransactionToken().GetAwaiter().GetResult();
+            _serviceNswTransactionTokenHelper.ClearTransactionTokenCache();
+            _serviceNswTransactionTokenHelper.GetTransactionToken().GetAwaiter().GetResult();
         }
     }
 }
