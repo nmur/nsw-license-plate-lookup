@@ -59,11 +59,12 @@ namespace NswLicensePlateLookupTests
         public async Task GivenValidPlateNumber_WhenTransactionTokenAreRequestedTwiceButCacheIsBypassed_ThenTransationTokenIsGeneratedTwice()
         {
             // Arrange
-            A.CallTo(() => _fakeServiceNswApi.SendServiceNswRequest<TokenResult>(A<ServiceNswRequestBody>._)).ReturnsNextFromSequence(GetSuccessfulTransactionTokenResponse());
             A.CallTo(() => _fakeServiceNswApi.SendServiceNswRequest<TokenResult>(A<ServiceNswRequestBody>._)).ReturnsNextFromSequence(GetSuccessfulTransactionTokenResponse2());
+            A.CallTo(() => _fakeServiceNswApi.SendServiceNswRequest<TokenResult>(A<ServiceNswRequestBody>._)).ReturnsNextFromSequence(GetSuccessfulTransactionTokenResponse());
 
             // Act 
             var token1 = await _serviceNswTransactionTokenHelper.GetTransactionToken();
+            _serviceNswTransactionTokenHelper.ClearTransactionTokenCache();
             var token2 = await _serviceNswTransactionTokenHelper.GetTransactionToken();
 
             // Assert
