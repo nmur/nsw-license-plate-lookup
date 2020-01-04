@@ -6,12 +6,15 @@ using FakeItEasy;
 using NswLicensePlateLookup.Models;
 using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 namespace NswLicensePlateLookupTests
 {
   public class ServiceNswRequestHelperTests
     {
         private const string ValidToken = "411a6958-3bc1-45a5-ab38-5b57aff75d75";
+        
+        private readonly ILogger<ServiceNswRequestHelper> _fakeLogger;
         
         private IServiceNswApi _fakeServiceNswApi;
 
@@ -23,10 +26,11 @@ namespace NswLicensePlateLookupTests
 
         public ServiceNswRequestHelperTests()
         {
+            _fakeLogger = A.Fake<ILogger<ServiceNswRequestHelper>>();
             _fakeServiceNswApi = A.Fake<IServiceNswApi>();
             _fakeServiceNswTransactionTokenHelper = A.Fake<IServiceNswTransactionTokenHelper>();
             _fakeMemoryCache = A.Fake<IMemoryCache>();
-            _serviceNswRequestHelper = new ServiceNswRequestHelper(_fakeServiceNswApi, _fakeServiceNswTransactionTokenHelper, _fakeMemoryCache);
+            _serviceNswRequestHelper = new ServiceNswRequestHelper(_fakeLogger, _fakeServiceNswApi, _fakeServiceNswTransactionTokenHelper, _fakeMemoryCache);
         }
 
         [Fact]
@@ -45,7 +49,7 @@ namespace NswLicensePlateLookupTests
             Assert.Equal(expectedPlateDetails, plateDetails);
         }
 
-        private async Task<List<ServiceNswResponse<PlateDetailsResult>>> GetSuccessfulPlateDetailsResponse()
+        private List<ServiceNswResponse<PlateDetailsResult>> GetSuccessfulPlateDetailsResponse()
         {
             return new List<ServiceNswResponse<PlateDetailsResult>>
             {
