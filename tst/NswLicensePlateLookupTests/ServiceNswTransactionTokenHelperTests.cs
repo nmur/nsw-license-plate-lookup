@@ -6,6 +6,7 @@ using FakeItEasy;
 using NswLicensePlateLookup.Models;
 using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 namespace NswLicensePlateLookupTests
 {
@@ -15,6 +16,8 @@ namespace NswLicensePlateLookupTests
 
         private const string ValidToken2 = "df1f30b5-2d64-4a50-92d0-cdb5c96b0413";
         
+        private readonly ILogger<ServiceNswTransactionTokenHelper> _fakeLogger;
+
         private IServiceNswApi _fakeServiceNswApi;
 
         private IMemoryCache _fakeMemoryCache;
@@ -23,9 +26,10 @@ namespace NswLicensePlateLookupTests
 
         public ServiceNswTransactionTokenHelperTests()
         {
+            _fakeLogger = A.Fake<ILogger<ServiceNswTransactionTokenHelper>>();
             _fakeServiceNswApi = A.Fake<IServiceNswApi>();
             _fakeMemoryCache = new MemoryCache(new MemoryCacheOptions());
-            _serviceNswTransactionTokenHelper = new ServiceNswTransactionTokenHelper(_fakeServiceNswApi, _fakeMemoryCache);
+            _serviceNswTransactionTokenHelper = new ServiceNswTransactionTokenHelper(_fakeLogger, _fakeServiceNswApi, _fakeMemoryCache);
         }
 
         [Fact]
@@ -72,7 +76,7 @@ namespace NswLicensePlateLookupTests
             Assert.Equal(ValidToken2, token2);
         }
 
-        private async Task<List<ServiceNswResponse<TokenResult>>> GetSuccessfulTransactionTokenResponse()
+        private List<ServiceNswResponse<TokenResult>> GetSuccessfulTransactionTokenResponse()
         {
             return new List<ServiceNswResponse<TokenResult>>
             {
@@ -94,7 +98,7 @@ namespace NswLicensePlateLookupTests
             };
         }
 
-        private async Task<List<ServiceNswResponse<TokenResult>>> GetSuccessfulTransactionTokenResponse2()
+        private List<ServiceNswResponse<TokenResult>> GetSuccessfulTransactionTokenResponse2()
         {
             return new List<ServiceNswResponse<TokenResult>>
             {

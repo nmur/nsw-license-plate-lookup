@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace NswLicensePlateLookup.Services
 {
@@ -10,11 +11,14 @@ namespace NswLicensePlateLookup.Services
     public class TransactionTokenRefreshBackgroundTask : IHostedService, IDisposable
     {
         private Timer _timer;
-        
+
+        private readonly ILogger _logger;
+
         private IServiceNswTransactionTokenHelper _serviceNswTransactionTokenHelper;
 
-        public TransactionTokenRefreshBackgroundTask(IServiceNswTransactionTokenHelper serviceNswTransactionTokenHelper)
+        public TransactionTokenRefreshBackgroundTask(ILogger<TransactionTokenRefreshBackgroundTask> logger, IServiceNswTransactionTokenHelper serviceNswTransactionTokenHelper)
         {
+            _logger = logger;
             _serviceNswTransactionTokenHelper = serviceNswTransactionTokenHelper;
         }
 
@@ -39,7 +43,9 @@ namespace NswLicensePlateLookup.Services
 
         private void RefreshTransactionToken(object state)
         {
+            _logger.LogDebug("Clearing transaction token cache");
             _serviceNswTransactionTokenHelper.ClearTransactionTokenCache();
+            _logger.LogDebug("Getting a fresh transaction token");
             _serviceNswTransactionTokenHelper.GetTransactionToken().GetAwaiter().GetResult();
         }
     }
