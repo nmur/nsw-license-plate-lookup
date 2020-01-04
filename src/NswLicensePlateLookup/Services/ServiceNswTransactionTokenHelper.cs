@@ -9,6 +9,7 @@ namespace NswLicensePlateLookup.Services
 {
     public class ServiceNswTransactionTokenHelper : IServiceNswTransactionTokenHelper
     {
+        private const string _tokenCacheKey = "token";
         private IServiceNswApi _serviceRequestApi;
         
         private IMemoryCache _cache;
@@ -22,13 +23,18 @@ namespace NswLicensePlateLookup.Services
         public async Task<string> GetTransactionToken()
         {
             return await
-                _cache.GetOrCreateAsync("token", async entry =>
+                _cache.GetOrCreateAsync(_tokenCacheKey, async entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromMinutes(10);
                     entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1);
                     var tokenResponse = await _serviceRequestApi.SendServiceNswRequest<TokenResult>(GetTransactionTokenRequestBody());
                     return GetTokenFromResponse(tokenResponse);
                 });
+        }
+
+        public void ClearTransactionTokenCache()
+        {
+            _cache.Remove(_tokenCacheKey);
         }
 
         private string GetTokenFromResponse(List<ServiceNswResponse<TokenResult>> tokenResponse) => tokenResponse[0].Result.Token;
