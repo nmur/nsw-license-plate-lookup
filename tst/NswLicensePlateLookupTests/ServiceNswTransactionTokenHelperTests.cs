@@ -27,7 +27,7 @@ namespace NswLicensePlateLookupTests
         }
 
         [Fact]
-        public async Task GivenValidPlateNumber_WhenPlateDetailsAreRequested_ThenPlateDetailsAreReturned()
+        public async Task GivenValidPlateNumber_WhenTransactionTokenAreRequested_ThenValidTransactionTokenIsReturned()
         {
             // Arrange
             A.CallTo(() => _fakeServiceNswApi.SendServiceNswRequest<TokenResult>(A<ServiceNswRequestBody>._)).Returns(GetSuccessfulTransactionTokenResponse());
@@ -37,6 +37,19 @@ namespace NswLicensePlateLookupTests
 
             // Assert
             Assert.Equal(ValidToken, token);
+        }
+
+        [Fact]
+        public async Task GivenValidPlateNumber_WhenTransactionTokenAreRequestedTwice_ThenTransationTokenIsGeneratedOnceOnly()
+        {
+            // Arrange
+            A.CallTo(() => _fakeServiceNswApi.SendServiceNswRequest<TokenResult>(A<ServiceNswRequestBody>._)).Returns(GetSuccessfulTransactionTokenResponse());
+
+            // Act 
+            var token = await _serviceNswTransactionTokenHelper.GetTransactionToken();
+
+            // Assert
+            A.CallTo(() => _fakeServiceNswApi.SendServiceNswRequest<TokenResult>(A<ServiceNswRequestBody>._)).MustHaveHappenedOnceExactly();
         }
 
         private async Task<List<ServiceNswResponse<TokenResult>>> GetSuccessfulTransactionTokenResponse()
