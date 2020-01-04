@@ -24,7 +24,7 @@ namespace NswLicensePlateLookup.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(RefreshTransactionToken, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            _timer = new Timer(RefreshTransactionToken, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
 
             return Task.CompletedTask;
         }
