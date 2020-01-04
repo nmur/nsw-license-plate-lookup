@@ -22,7 +22,7 @@ namespace NswLicensePlateLookupTests
         public ServiceNswTransactionTokenHelperTests()
         {
             _fakeServiceNswApi = A.Fake<IServiceNswApi>();
-            _fakeMemoryCache = A.Fake<IMemoryCache>();
+            _fakeMemoryCache = new MemoryCache(new MemoryCacheOptions());
             _serviceNswTransactionTokenHelper = new ServiceNswTransactionTokenHelper(_fakeServiceNswApi, _fakeMemoryCache);
         }
 
@@ -46,7 +46,8 @@ namespace NswLicensePlateLookupTests
             A.CallTo(() => _fakeServiceNswApi.SendServiceNswRequest<TokenResult>(A<ServiceNswRequestBody>._)).Returns(GetSuccessfulTransactionTokenResponse());
 
             // Act 
-            var token = await _serviceNswTransactionTokenHelper.GetTransactionToken();
+            await _serviceNswTransactionTokenHelper.GetTransactionToken();
+            await _serviceNswTransactionTokenHelper.GetTransactionToken();
 
             // Assert
             A.CallTo(() => _fakeServiceNswApi.SendServiceNswRequest<TokenResult>(A<ServiceNswRequestBody>._)).MustHaveHappenedOnceExactly();
