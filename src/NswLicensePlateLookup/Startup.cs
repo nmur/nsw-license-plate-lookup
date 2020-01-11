@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NswLicensePlateLookup.Interfaces;
 using NswLicensePlateLookup.Services;
 using Refit;
@@ -24,7 +25,8 @@ namespace NswLicensePlateLookup
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddRefitClient<IServiceNswApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://my.service.nsw.gov.au"));
@@ -36,7 +38,7 @@ namespace NswLicensePlateLookup
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -49,7 +51,12 @@ namespace NswLicensePlateLookup
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseRouting();
+            app.UseCors();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
