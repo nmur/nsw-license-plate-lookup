@@ -2,20 +2,34 @@ using Xunit;
 using NswLicensePlateLookup.Interfaces;
 using System.Threading.Tasks;
 using NswLicensePlateLookup.Controllers;
-using Microsoft.AspNetCore.Mvc;
 using NswLicensePlateLookup.Models;
+using Microsoft.AspNetCore.Mvc.Testing;
+using WireMock.Server;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using System.Net.Http;
+using System;
 
 namespace NswLicensePlateLookupTests
 {
-    public class PlateLookupControllerTests
+    public class PlateLookupControllerIntTests : IClassFixture<WebApplicationFactory<NswLicensePlateLookup.Startup>>, IDisposable
     {
-        private PlateLookupController _plateLookupController;
+        private readonly WebApplicationFactory<NswLicensePlateLookup.Startup> _factory;
 
-        private IPlateLookupService _fakePlateLookupService;
+        private HttpClient _client;
 
-        public PlateLookupControllerIntTests()
+        private WireMockServer _server;
+
+        public PlateLookupControllerIntTests(WebApplicationFactory<NswLicensePlateLookup.Startup> factory)
         {
-            _plateLookupController = new PlateLookupController(_fakePlateLookupService);
+            _factory = factory;
+            _client = _factory.CreateClient();
+            _server = WireMockServer.Start();
+        }
+
+        public void Dispose()
+        {
+            _server.Stop();
         }
 
         [Fact]
@@ -23,14 +37,21 @@ namespace NswLicensePlateLookupTests
         {
             // Arrange
             var plateNumber = "RWAGON";
-            A.CallTo(() => _fakePlateLookupService.GetPlateDetails(plateNumber)).Returns(SuccessfulPlateDetailsResponseVehicle);
+            
+            _server.Given(Request.Create().WithPath("/MyServiceNSW/apexremote").UsingPost())
+                .RespondWith(
+                    Response.Create()
+                    .WithStatusCode(200)
+                    .WithHeader("Content-Type", "application/json;charset=UTF-8")
+                    .WithBody("Hello world!")
+                );
 
             // Act 
-            var plateDetailsResponse = await _plateLookupController.GetPlateDetails(plateNumber);
+            var plateDetailsResponse = await _client.GetAsync($"api/plate/{plateNumber}");
 
             // Assert
-            var plateDetails = plateDetailsResponse.Result as OkObjectResult;;
-            Assert.Equal(SuccessfulPlateDetailsResponseVehicle, plateDetails.Value);
+            //var plateDetails = plateDetailsResponse.Result as OkObjectResult;;
+            //Assert.Equal(SuccessfulPlateDetailsResponseVehicle, plateDetails.Value);
         }
 
         private PlateDetails SuccessfulPlateDetailsResponseVehicle = new PlateDetails
@@ -49,6 +70,13 @@ namespace NswLicensePlateLookupTests
                 VehicleType = "PASSENGER VEHICLES",
                 VinNumber = "xxxxxxxxxxxxx0823"
             }
+        };
+
+        private TokenResult SuccessfulTransactionTokenResponse = new TokenResult
+        {
+            StatusCode = 2000,
+            StatusMessage = "success",
+            Token = "valid-token"
         };
     }
 }
