@@ -9,6 +9,8 @@ using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using System.Net.Http;
 using System;
+using Newtonsoft.Json;
+using FluentAssertions;
 
 namespace NswLicensePlateLookupTests
 {
@@ -50,8 +52,9 @@ namespace NswLicensePlateLookupTests
             var plateDetailsResponse = await _client.GetAsync($"api/plate/{plateNumber}");
 
             // Assert
-            //var plateDetails = plateDetailsResponse.Result as OkObjectResult;;
-            //Assert.Equal(SuccessfulPlateDetailsResponseVehicle, plateDetails.Value);
+            var plateDetailsString = await plateDetailsResponse.Content.ReadAsStringAsync();
+            var plateDetails = JsonConvert.DeserializeObject<PlateDetails>(plateDetailsString);
+            plateDetails.Should().BeEquivalentTo(SuccessfulPlateDetailsResponseVehicle);
         }
 
         private PlateDetails SuccessfulPlateDetailsResponseVehicle = new PlateDetails
