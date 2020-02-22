@@ -26,10 +26,7 @@ namespace NswLicensePlateLookupTests
         public PlateLookupControllerIntTests(WebApplicationFactory<NswLicensePlateLookup.Startup> factory)
         {
             _factory = factory;
-            _client = _factory
-                .WithWebHostBuilder(builder => 
-                    builder.ConfigureTestServices(ConfigureTestServices))
-                .CreateClient();
+            _client = _factory.CreateClient();
             _server = WireMockServer.Start(new FluentMockServerSettings
                 {
                     Port = 10321,
