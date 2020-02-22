@@ -5,6 +5,7 @@ using NswLicensePlateLookup.Controllers;
 using NswLicensePlateLookup.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using WireMock.Server;
+using WireMock.Settings;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using System.Net.Http;
@@ -25,8 +26,15 @@ namespace NswLicensePlateLookupTests
         public PlateLookupControllerIntTests(WebApplicationFactory<NswLicensePlateLookup.Startup> factory)
         {
             _factory = factory;
-            _client = _factory.CreateClient();
-            _server = WireMockServer.Start();
+            _client = _factory
+                .WithWebHostBuilder(builder => 
+                    builder.ConfigureTestServices(ConfigureTestServices))
+                .CreateClient();
+            _server = WireMockServer.Start(new FluentMockServerSettings
+                {
+                    Port = 10321,
+                }   
+            );
         }
 
         public void Dispose()
