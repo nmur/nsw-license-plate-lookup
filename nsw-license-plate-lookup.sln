@@ -9,7 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NswLicensePlateLookup", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tst", "tst", "{5F10FAFD-AE6D-44E8-93A5-46AC5ED8C557}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NswLicensePlateLookupTests", "tst\NswLicensePlateLookupTests\NswLicensePlateLookupTests.csproj", "{5F8553E6-B47D-41DD-847D-890E84D7416F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NswLicensePlateLookupTests", "tst\unit\NswLicensePlateLookupTests\NswLicensePlateLookupTests.csproj", "{5F8553E6-B47D-41DD-847D-890E84D7416F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "int", "int", "{CAAB4B2F-778C-4D40-9C5E-98473665371C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NswLicensePlateLookupIntTests", "tst\int\NswLicensePlateLookupIntTests\NswLicensePlateLookupIntTests.csproj", "{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,9 +52,23 @@ Global
 		{5F8553E6-B47D-41DD-847D-890E84D7416F}.Release|x64.Build.0 = Release|Any CPU
 		{5F8553E6-B47D-41DD-847D-890E84D7416F}.Release|x86.ActiveCfg = Release|Any CPU
 		{5F8553E6-B47D-41DD-847D-890E84D7416F}.Release|x86.Build.0 = Release|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Debug|x64.Build.0 = Debug|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Debug|x86.Build.0 = Debug|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Release|x64.ActiveCfg = Release|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Release|x64.Build.0 = Release|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Release|x86.ActiveCfg = Release|Any CPU
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D1467BFC-194F-447F-BAB8-097D4ACF7C9C} = {2483B366-02E4-4047-AD34-F006C9B7CBC5}
 		{5F8553E6-B47D-41DD-847D-890E84D7416F} = {5F10FAFD-AE6D-44E8-93A5-46AC5ED8C557}
+		{CAAB4B2F-778C-4D40-9C5E-98473665371C} = {5F10FAFD-AE6D-44E8-93A5-46AC5ED8C557}
+		{15A5F575-C0FA-4B81-BB6B-329CD7996EB5} = {CAAB4B2F-778C-4D40-9C5E-98473665371C}
 	EndGlobalSection
 EndGlobal
