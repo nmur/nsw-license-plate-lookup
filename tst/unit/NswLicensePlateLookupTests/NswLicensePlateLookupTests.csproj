@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NswLicensePlateLookup\NswLicensePlateLookup.csproj" />
+    <ProjectReference Include="..\..\..\src\NswLicensePlateLookup\NswLicensePlateLookup.csproj" />
   </ItemGroup>
 
 </Project>

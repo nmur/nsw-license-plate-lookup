@@ -29,7 +29,7 @@ namespace NswLicensePlateLookup
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddRefitClient<IServiceNswApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://my.service.nsw.gov.au"));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("ServiceNswUrl")));
 
             services.AddSingleton<IServiceNswTransactionTokenHelper, ServiceNswTransactionTokenHelper>();
             services.AddSingleton<IServiceNswRequestHelper, ServiceNswRequestHelper>();
