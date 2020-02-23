@@ -4,30 +4,37 @@ using System.Threading.Tasks;
 using NswLicensePlateLookup.Controllers;
 using NswLicensePlateLookup.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using WireMock.Server;
 using WireMock.Settings;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using System.Net.Http;
 using System;
+using System.IO;
 using Newtonsoft.Json;
 using FluentAssertions;
 
 namespace NswLicensePlateLookupTests
 {
-    public class PlateLookupControllerIntTests : IClassFixture<TestingWebApplicationFactory<NswLicensePlateLookup.Program>>, IDisposable
+    public class PlateLookupControllerIntTests : IClassFixture<WebApplicationFactory<NswLicensePlateLookup.Startup>>, IDisposable
     {
-        private readonly TestingWebApplicationFactory<NswLicensePlateLookup.Program> _factory;
+        private readonly WebApplicationFactory<NswLicensePlateLookup.Startup> _factory;
 
         private HttpClient _client;
 
         private WireMockServer _server;
 
-        public PlateLookupControllerIntTests(TestingWebApplicationFactory<NswLicensePlateLookup.Program> factory)
+        public PlateLookupControllerIntTests(WebApplicationFactory<NswLicensePlateLookup.Startup> factory)
         {
             _factory = factory;
-            System.Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Testing");
-            _client = _factory.CreateClient();
+            _client = _factory.WithWebHostBuilder(builder =>
+                {
+                    builder.ConfigureAppConfiguration((context,conf) =>
+                    {
+                        conf.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Testing.json"));
+                    });
+                }).CreateClient();
             _server = WireMockServer.Start(new FluentMockServerSettings
                 {
                     Port = 10321,
@@ -51,7 +58,7 @@ namespace NswLicensePlateLookupTests
                     Response.Create()
                     .WithStatusCode(200)
                     .WithHeader("Content-Type", "application/json;charset=UTF-8")
-                    .WithBody("{\"Value\": \"Hello world!\"}")
+                    .WithBody("Hello world!")
                 );
 
             // Act 

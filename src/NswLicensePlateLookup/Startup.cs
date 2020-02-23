@@ -28,10 +28,8 @@ namespace NswLicensePlateLookup
             services.AddControllers();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            services.AddSingleton<IServiceNswConfiguration, ServiceNswConfiguration>();
-            var sp = services.BuildServiceProvider();
             services.AddRefitClient<IServiceNswApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = sp.GetService<IServiceNswConfiguration>().GetBaseAddress());
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("ServiceNswUrl")));
 
             services.AddSingleton<IServiceNswTransactionTokenHelper, ServiceNswTransactionTokenHelper>();
             services.AddSingleton<IServiceNswRequestHelper, ServiceNswRequestHelper>();
