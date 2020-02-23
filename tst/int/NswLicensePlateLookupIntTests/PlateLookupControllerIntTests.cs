@@ -15,17 +15,18 @@ using FluentAssertions;
 
 namespace NswLicensePlateLookupTests
 {
-    public class PlateLookupControllerIntTests : IClassFixture<WebApplicationFactory<NswLicensePlateLookup.Startup>>, IDisposable
+    public class PlateLookupControllerIntTests : IClassFixture<TestingWebApplicationFactory<NswLicensePlateLookup.Program>>, IDisposable
     {
-        private readonly WebApplicationFactory<NswLicensePlateLookup.Startup> _factory;
+        private readonly TestingWebApplicationFactory<NswLicensePlateLookup.Program> _factory;
 
         private HttpClient _client;
 
         private WireMockServer _server;
 
-        public PlateLookupControllerIntTests(WebApplicationFactory<NswLicensePlateLookup.Startup> factory)
+        public PlateLookupControllerIntTests(TestingWebApplicationFactory<NswLicensePlateLookup.Program> factory)
         {
             _factory = factory;
+            System.Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Testing");
             _client = _factory.CreateClient();
             _server = WireMockServer.Start(new FluentMockServerSettings
                 {
@@ -50,7 +51,7 @@ namespace NswLicensePlateLookupTests
                     Response.Create()
                     .WithStatusCode(200)
                     .WithHeader("Content-Type", "application/json;charset=UTF-8")
-                    .WithBody("Hello world!")
+                    .WithBody("{\"Value\": \"Hello world!\"}")
                 );
 
             // Act 
