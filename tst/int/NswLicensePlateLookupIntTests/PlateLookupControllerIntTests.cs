@@ -12,6 +12,7 @@ using WireMock.ResponseBuilders;
 using System.Net.Http;
 using System;
 using System.IO;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using FluentAssertions;
 
@@ -27,6 +28,7 @@ namespace NswLicensePlateLookupTests
 
         public PlateLookupControllerIntTests(WebApplicationFactory<NswLicensePlateLookup.Startup> factory)
         {
+            InitializeMockServiceNswApi();
             _factory = factory;
             _client = _factory.WithWebHostBuilder(builder =>
                 {
@@ -35,11 +37,6 @@ namespace NswLicensePlateLookupTests
                         conf.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Testing.json"));
                     });
                 }).CreateClient();
-            _server = WireMockServer.Start(new FluentMockServerSettings
-                {
-                    Port = 10321,
-                }   
-            );
         }
 
         public void Dispose()
@@ -52,14 +49,6 @@ namespace NswLicensePlateLookupTests
         {
             // Arrange
             var plateNumber = "RWAGON";
-            
-            _server.Given(Request.Create().WithPath("/MyServiceNSW/apexremote").UsingPost())
-                .RespondWith(
-                    Response.Create()
-                    .WithStatusCode(200)
-                    .WithHeader("Content-Type", "application/json;charset=UTF-8")
-                    .WithBody("Hello world!")
-                );
 
             // Act 
             var plateDetailsResponse = await _client.GetAsync($"api/plate/{plateNumber}");
@@ -68,6 +57,22 @@ namespace NswLicensePlateLookupTests
             var plateDetailsString = await plateDetailsResponse.Content.ReadAsStringAsync();
             var plateDetails = JsonConvert.DeserializeObject<PlateDetails>(plateDetailsString);
             plateDetails.Should().BeEquivalentTo(SuccessfulPlateDetailsResponseVehicle);
+        }
+
+        private void InitializeMockServiceNswApi()
+        {
+            _server = WireMockServer.Start(new FluentMockServerSettings
+                {
+                    Port = 10321,
+                }   
+            );
+            _server.Given(Request.Create().WithPath("/MyServiceNSW/apexremote").UsingPost())
+                .RespondWith(
+                    Response.Create()
+                    .WithStatusCode(200)
+                    .WithHeader("Content-Type", "application/json;charset=UTF-8")
+                    .WithBody(JsonConvert.SerializeObject(SuccessfulTransactionTokenResponse))
+                );
         }
 
         private PlateDetails SuccessfulPlateDetailsResponseVehicle = new PlateDetails
@@ -88,11 +93,23 @@ namespace NswLicensePlateLookupTests
             }
         };
 
-        private TokenResult SuccessfulTransactionTokenResponse = new TokenResult
+        private List<ServiceNswResponse<TokenResult>> SuccessfulTransactionTokenResponse = new List<ServiceNswResponse<TokenResult>>
         {
-            StatusCode = 2000,
-            StatusMessage = "success",
-            Token = "valid-token"
+            new ServiceNswResponse<TokenResult>
+            {
+                StatusCode = 200,
+                Type = "rpc",
+                Tid = 1,
+                Ref = false,
+                Action = "RMSWrapperCtrl",
+                Method = "createRMSTransaction",
+                Result = new TokenResult 
+                    {
+                        StatusCode = 2000,
+                        StatusMessage = "success",
+                        Token = "valid-token"
+                    }
+            }
         };
     }
 }
